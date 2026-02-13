@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SIAMCRAFT — Marketplace</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ===== LOGIN MODAL ===== -->
+<div id="authModal" class="modal">
+  <div class="modal-content premium">
+
+    <h3>เข้าสู่ระบบ</h3>
+
+    <div class="input-group">
+      <span>📧</span>
+      <input id="authEmail" placeholder="Email">
+    </div>
+
+    <div class="input-group">
+      <span>🔒</span>
+      <input id="authPass" type="password" placeholder="Password">
+      <span class="toggle-pass" onclick="togglePassword()">👁️</span>
+    </div>
+
+    <small id="errorMsg"></small>
+
+    <button class="btn-main" onclick="submitAuth()">เข้าสู่ระบบ</button>
+
+    <div class="social-login">
+      <button class="google">Google</button>
+      <button class="facebook">Facebook</button>
+    </div>
+
+    <!-- ⭐ เปลี่ยน toggleAuth → openRegister -->
+    <p onclick="openRegister()" style="cursor:pointer;">
+      สมัครสมาชิก
+    </p>
+
+    <button onclick="closeAuth()">ปิด</button>
+  </div>
+</div>
+
+<!-- ===== REGISTER MODAL (เพิ่มใหม่) ===== -->
+<div id="registerModal" class="modal">
+  <div class="modal-content premium">
+
+    <h3>สมัครสมาชิก</h3>
+
+    <div class="input-group">
+      <span>👤</span>
+      <input id="regName" placeholder="ชื่อผู้ใช้">
+    </div>
+
+    <div class="input-group">
+      <span>📧</span>
+      <input id="regEmail" placeholder="Email">
+    </div>
+
+    <div class="input-group">
+      <span>🔒</span>
+      <input id="regPass" type="password" placeholder="Password">
+    </div>
+
+    <div class="input-group">
+      <span>🔒</span>
+      <input id="regPass2" type="password" placeholder="Confirm Password">
+    </div>
+
+    <small id="regError" style="color:#e74c3c"></small>
+
+    <button class="btn-main" onclick="submitRegister()">
+      สมัครสมาชิก
+    </button>
+
+    <p onclick="switchToLogin()" style="cursor:pointer;">
+      มีบัญชีแล้ว? เข้าสู่ระบบ
+    </p>
+
+    <button onclick="closeRegister()">ปิด</button>
+  </div>
+</div>
+
+<!-- ===== TOAST ALERT ===== -->
+<div id="toast"></div>
+
+<!-- ===== CART MODAL ===== -->
+<div id="cartModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>ตะกร้าสินค้า</h3>
+      <span class="close" onclick="closeCart()">×</span>
+    </div>
+
+    <div id="cartItems" class="cart-items"></div>
+
+    <div class="cart-footer">
+      <div class="total">
+        รวมทั้งหมด: <b id="cartTotal">฿0</b>
+      </div>
+      <button class="checkout-btn">ชำระเงิน</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<header class="navbar">
+  <div class="nav-inner">
+
+    <div class="logo" onclick="goHome()">
+      🧺 <span>SIAMCRAFT</span>
+    </div>
+
+    <nav class="menu">
+      <a href="#" onclick="goHome()">หน้าแรก</a>
+      <a href="#" onclick="showCategory('community')">ร้านค้าในชุมชน</a>
+      <a href="#" onclick="showCategory('standard')">มาตรฐานสินค้า</a>
+      <a href="#" onclick="showAbout()">About</a>
+    </nav>
+
+    <div class="search-box">
+      🔎
+      <input id="searchInput" placeholder="ค้นหาสินค้า..." />
+    </div>
+
+    <div class="cart-btn" onclick="openCart()">
+      ตะกร้า
+      <span class="cart-badge" id="cartCount">0</span>
+    </div>
+
+    <button class="btn seller-btn" onclick="openAuth()">
+      สมัครเป็นผู้ขาย
+    </button>
+
+    <button class="btn login-btn" onclick="openAuth()">
+      เข้าสู่ระบบ
+    </button>
+
+  </div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main class="container">
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>ตลาดสินค้าไทยจากชุมชน<br>สู่มือคุณ</h1>
+    <p>สนับสนุนสินค้าไทยแท้จากผู้ผลิตท้องถิ่นทั่วประเทศ</p>
+   <button class="btn hero-btn" onclick="scrollToProducts()">
+  เลือกชมสินค้า
+</button>
+
+  </div>
+
+  <div class="hero-img">
+  <img id="heroSlide" src="images/hero/hero1.jpg">
+</div>
+
+</section>
+
+<div class="region-filter">
+  <button onclick="filterRegion('all')" class="active">ทั้งหมด</button>
+  <button onclick="filterRegion('north')">เหนือ</button>
+  <button onclick="filterRegion('isan')">อีสาน</button>
+  <button onclick="filterRegion('central')">กลาง</button>
+  <button onclick="filterRegion('south')">ใต้</button>
+</div>
+
+<h2 class="section-title">สินค้าแนะนำ</h2>
+
+<div id="productGrid" class="grid"></div>
+
+<div class="pagination">
+  <button id="prevBtn">ก่อนหน้า</button>
+  <span id="pageInfo"></span>
+  <button id="nextBtn">ถัดไป</button>
+</div>
+
+</main>
+
+<footer>
+© 2026 SIAMCRAFT — Handmade Thai Marketplace
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
